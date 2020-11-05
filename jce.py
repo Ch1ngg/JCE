@@ -58,9 +58,11 @@ def ConvertJavaCodeToCDATA(inpath,topath):
         num += 1
         if space == num:
             num = 0
+            newContents += returnCDATA(i) 
+        else:
             newContents += i
             continue
-        newContents += returnCDATA(i)
+        
     with open(topath,'w+') as fs:
         fs.write(newContents)
     f.close()
