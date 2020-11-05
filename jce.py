@@ -72,7 +72,6 @@ if __name__ == "__main__":
     parser.add_argument('-o', '--outfile',help = 'Save Encode JSP/JSPX File')
     parser.add_argument('-t', '--type', help = 'Unicode/HTML/CDATA default is unicode',default="unicode")
     args = parser.parse_args()
-    print(args)
     if args.infile and args.outfile:
         if args.type == "unicode":
             try:
