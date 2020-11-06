@@ -26,7 +26,7 @@ def ConvertJavaCodeToUnicode(inpath,topath):
     newContents = ""
     for i in contents:
         if re.match(r"\w",i) != None:
-            newContents += "\\u00" + binascii.b2a_hex(i.encode('utf-8')).decode()
+            newContents += returnUnicode(i)
         else:
             newContents += i
     with open(topath,'w+') as fs:
