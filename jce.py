@@ -68,11 +68,32 @@ def ConvertJavaCodeToCDATA(inpath,topath):
     f.close()
     fs.close()
 
+def JavaCodeRandomEncode(inpath,topath):
+    newContents = ""
+    with open(inpath,'r') as f:
+        contents = f.read() 
+    for i in contents:
+        if re.match(r"\w",i) != None:
+            space = random.randint(1,9)
+            if space <= 3:
+                newContents += returnUnicode(i)
+            elif space > 3 and space <= 6:
+                newContents += returnHTML(i)
+            elif space > 6:
+                newContents += returnCDATA(i)
+        else:
+            newContents += i
+            continue
+    with open(topath,'w+') as fs:
+        fs.write(newContents)
+    f.close()
+    fs.close()
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'JCE - JSP/JPSX CodeEncode')
     parser.add_argument('-i', '--infile', help = 'Need Encode JSP/JSPX File')
     parser.add_argument('-o', '--outfile',help = 'Save Encode JSP/JSPX File')
-    parser.add_argument('-t', '--type', help = 'Unicode/HTML/CDATA default is unicode',default="unicode")
+    parser.add_argument('-t', '--type', help = 'Unicode/HTML/CDATA/All default is unicode',default="unicode")
     args = parser.parse_args()
     if args.infile and args.outfile:
         if args.type == "unicode":
@@ -85,6 +106,12 @@ if __name__ == "__main__":
             try:
                 ConvertJavaCodeToHTML(args.infile,args.outfile)
                 logging.info("\033[1;36m Convert To HTML Success !\033[0m")
+            except Exception as e:
+                logging.info("\033[1;31m "+ e +" \033[0m")
+        elif args.type == "all":
+            try:
+                JavaCodeRandomEncode(args.infile,args.outfile)
+                logging.info("\033[1;36m Convert To RandomEncode Success !\033[0m")
             except Exception as e:
                 logging.info("\033[1;31m "+ e +" \033[0m")
         else:
