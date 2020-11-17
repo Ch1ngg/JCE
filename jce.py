@@ -56,13 +56,15 @@ def ConvertJavaCodeToCDATA(inpath,topath):
         contents = f.read() 
     for i in contents:
         num += 1
-        if space == num:
-            num = 0
-            newContents += returnCDATA(i) 
+        if re.match(r"\w",i) != None:
+            if space == num:
+                num = 0
+                newContents += returnCDATA(i) 
+            else:
+                newContents += i
+                continue
         else:
             newContents += i
-            continue
-        
     with open(topath,'w+') as fs:
         fs.write(newContents)
     f.close()
