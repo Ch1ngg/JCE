@@ -62,7 +62,6 @@ def ConvertJavaCodeToCDATA(inpath,topath):
                 newContents += returnCDATA(i) 
             else:
                 newContents += i
-                continue
         else:
             newContents += i
     with open(topath,'w+') as fs:
@@ -85,7 +84,6 @@ def JavaCodeRandomEncode(inpath,topath):
                 newContents += returnCDATA(i)
         else:
             newContents += i
-            continue
     with open(topath,'w+') as fs:
         fs.write(newContents)
     f.close()
