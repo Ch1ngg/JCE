@@ -22,72 +22,115 @@ def returnCDATA(keyword):
 
 def ConvertJavaCodeToUnicode(inpath,topath):
     with open(inpath,'r') as f:
-        contents = f.read()
+        contentlines = f.readlines()
     newContents = ""
-    for i in contents:
-        if re.match(r"\w",i) != None:
-            newContents += returnUnicode(i)
-        else:
-            newContents += i
-    with open(topath,'w+') as fs:
-        fs.write(newContents)
-    f.close()
-    fs.close()
+    for i in contentlines:
+        if "page import" in i or "page pageEncoding" in i or "page contentType" in i:
+            oldstr = i[i.find('"') + 1 :i.rfind('"')]
+            temp = ""
+            for n in oldstr:
+                if re.match(r"\w",n) != None:
+                    temp += returnUnicode(n)
+                else:
+                    temp += n
+            newContents += i.replace(oldstr,temp)
+            continue
+        for n in i:
+            if re.match(r"\w",n) != None:
+                newContents += returnUnicode(n)
+            else:
+                newContents += n
+        with open(topath,'w+') as fs:
+            fs.write(newContents)
+        f.close()
+        fs.close()
 
 def ConvertJavaCodeToHTML(inpath,topath):
-    newContents = ""
     with open(inpath,'r') as f:
-        contents = f.read() 
-    for i in contents:
-        if re.match(r"\w",i) != None:
-            newContents += returnHTML(i)
-        else:
-            newContents += i
-    with open(topath,'w+') as fs:
-        fs.write(newContents)
-    f.close()
-    fs.close()
+        contentlines = f.readlines()
+    newContents = ""
+    for i in contentlines:
+        if "page import" in i or "page pageEncoding" in i or "page contentType" in i:
+            oldstr = i[i.find('"') + 1 :i.rfind('"')]
+            temp = ""
+            for n in oldstr:
+                if re.match(r"\w",n) != None:
+                    temp += returnHTML(n)
+                else:
+                    temp += n
+            newContents += i.replace(oldstr,temp)
+            continue
+        for n in i:
+            if re.match(r"\w",n) != None:
+                newContents += returnHTML(n)
+            else:
+                newContents += n
+        with open(topath,'w+') as fs:
+            fs.write(newContents)
+        f.close()
+        fs.close()
 
 def ConvertJavaCodeToCDATA(inpath,topath):
-    newContents = ""
-    space = random.randint(2,6)
-    num = 0
     with open(inpath,'r') as f:
-        contents = f.read() 
-    for i in contents:
-        num += 1
-        if re.match(r"\w",i) != None:
-            if space == num:
-                num = 0
-                newContents += returnCDATA(i) 
+        contentlines = f.readlines()
+    newContents = ""
+    for i in contentlines:
+        if "page import" in i or "page pageEncoding" in i or "page contentType" in i:
+            oldstr = i[i.find('"') + 1 :i.rfind('"')]
+            temp = ""
+            for n in oldstr:
+                if re.match(r"\w",n) != None:
+                    temp += returnCDATA(n)
+                else:
+                    temp += n
+            newContents += i.replace(oldstr,temp)
+            continue
+        for n in i:
+            if re.match(r"\w",n) != None:
+                newContents += returnCDATA(n)
             else:
-                newContents += i
-        else:
-            newContents += i
-    with open(topath,'w+') as fs:
-        fs.write(newContents)
-    f.close()
-    fs.close()
+                newContents += n
+        with open(topath,'w+') as fs:
+            fs.write(newContents)
+        f.close()
+        fs.close()
 
 def JavaCodeRandomEncode(inpath,topath):
-    newContents = ""
     with open(inpath,'r') as f:
-        contents = f.read() 
-    for i in contents:
-        if re.match(r"\w",i) != None:
-            space = random.randint(1,9)
-            if space <= 3:
-                newContents += returnUnicode(i)
-            elif space > 3 and space <= 6:
-                newContents += returnHTML(i)
-            elif space > 6:
-                newContents += returnCDATA(i)
-        else:
-            newContents += i
-    with open(topath,'w+') as fs:
-        fs.write(newContents)
-    f.close()
-    fs.close()
+        contentlines = f.readlines()
+    newContents = ""
+    for i in contentlines:
+        if "page import" in i or "page pageEncoding" in i or "page contentType" in i:
+            oldstr = i[i.find('"') + 1 :i.rfind('"')]
+            temp = ""
+            for n in oldstr:
+                if re.match(r"\w",n) != None:
+                    space = random.randint(1,9)
+                    if space <= 3:
+                        temp += returnUnicode(n)
+                    elif space > 3 and space <= 6:
+                        temp += returnHTML(n)
+                    elif space > 6:
+                        temp += returnCDATA(n)
+                else:
+                    temp += n
+            newContents += i.replace(oldstr,temp)
+            continue
+        for n in i:
+            if re.match(r"\w",n) != None:
+                space = random.randint(1,9)
+                if space <= 3:
+                    newContents += returnUnicode(n)
+                elif space > 3 and space <= 6:
+                    newContents += returnHTML(n)
+                elif space > 6:
+                    newContents += returnCDATA(n)
+            else:
+                newContents += n
+        with open(topath,'w+') as fs:
+            fs.write(newContents)
+        f.close()
+        fs.close()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'JCE - JSP/JPSX CodeEncode')
@@ -96,19 +139,19 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--type', help = 'Unicode/HTML/CDATA/All default is unicode',default="unicode")
     args = parser.parse_args()
     if args.infile and args.outfile:
-        if args.type == "unicode":
+        if args.type.lower() == "unicode":
             try:
                 ConvertJavaCodeToUnicode(args.infile,args.outfile)
                 logging.info("\033[1;36m Convert To Unicode Success !\033[0m")
             except Exception as e:
                 logging.info("\033[1;31m "+ e +" \033[0m")
-        elif args.type == "html":
+        elif args.type.lower() == "html":
             try:
                 ConvertJavaCodeToHTML(args.infile,args.outfile)
                 logging.info("\033[1;36m Convert To HTML Success !\033[0m")
             except Exception as e:
                 logging.info("\033[1;31m "+ e +" \033[0m")
-        elif args.type == "all":
+        elif args.type.lower() == "all":
             try:
                 JavaCodeRandomEncode(args.infile,args.outfile)
                 logging.info("\033[1;36m Convert To RandomEncode Success !\033[0m")
