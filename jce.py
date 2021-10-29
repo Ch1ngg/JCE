@@ -25,6 +25,9 @@ def ConvertJavaCodeToUnicode(inpath,topath):
         contentlines = f.readlines()
     newContents = ""
     for i in contentlines:
+        if 'jsp:root' in i or 'jsp:declaration' in i or 'jsp:scriptlet' in i or 'jsp:directive.page' in i or '<![CDATA[' in i or ']]>' in i:
+            newContents += i
+            continue
         if "page import" in i or "page pageEncoding" in i or "page contentType" in i:
             oldstr = i[i.find('"') + 1 :i.rfind('"')]
             temp = ""
@@ -40,16 +43,19 @@ def ConvertJavaCodeToUnicode(inpath,topath):
                 newContents += returnUnicode(n)
             else:
                 newContents += n
-        with open(topath,'w+') as fs:
-            fs.write(newContents)
-        f.close()
-        fs.close()
+    with open(topath,'w+') as fs:
+        fs.write(newContents)
+    f.close()
+    fs.close()
 
 def ConvertJavaCodeToHTML(inpath,topath):
     with open(inpath,'r') as f:
         contentlines = f.readlines()
     newContents = ""
     for i in contentlines:
+        if 'jsp:root' in i or 'jsp:declaration' in i or 'jsp:scriptlet' in i or 'jsp:directive.page' in i or '<![CDATA[' in i or ']]>' in i:
+            newContents += i
+            continue
         if "page import" in i or "page pageEncoding" in i or "page contentType" in i:
             oldstr = i[i.find('"') + 1 :i.rfind('"')]
             temp = ""
@@ -65,16 +71,19 @@ def ConvertJavaCodeToHTML(inpath,topath):
                 newContents += returnHTML(n)
             else:
                 newContents += n
-        with open(topath,'w+') as fs:
-            fs.write(newContents)
-        f.close()
-        fs.close()
+    with open(topath,'w+') as fs:
+        fs.write(newContents)
+    f.close()
+    fs.close()
 
 def ConvertJavaCodeToCDATA(inpath,topath):
     with open(inpath,'r') as f:
         contentlines = f.readlines()
     newContents = ""
     for i in contentlines:
+        if 'jsp:root' in i or 'jsp:declaration' in i or 'jsp:scriptlet' in i or 'jsp:directive.page' in i or '<![CDATA[' in i or ']]>' in i:
+            newContents += i
+            continue
         if "page import" in i or "page pageEncoding" in i or "page contentType" in i:
             oldstr = i[i.find('"') + 1 :i.rfind('"')]
             temp = ""
@@ -90,16 +99,19 @@ def ConvertJavaCodeToCDATA(inpath,topath):
                 newContents += returnCDATA(n)
             else:
                 newContents += n
-        with open(topath,'w+') as fs:
-            fs.write(newContents)
-        f.close()
-        fs.close()
+    with open(topath,'w+') as fs:
+        fs.write(newContents)
+    f.close()
+    fs.close()
 
 def JavaCodeRandomEncode(inpath,topath):
     with open(inpath,'r') as f:
         contentlines = f.readlines()
     newContents = ""
     for i in contentlines:
+        if 'jsp:root' in i or 'jsp:declaration' in i or 'jsp:scriptlet' in i or 'jsp:directive.page' in i or '<![CDATA[' in i or ']]>' in i:
+            newContents += i
+            continue
         if "page import" in i or "page pageEncoding" in i or "page contentType" in i:
             oldstr = i[i.find('"') + 1 :i.rfind('"')]
             temp = ""
@@ -127,10 +139,10 @@ def JavaCodeRandomEncode(inpath,topath):
                     newContents += returnCDATA(n)
             else:
                 newContents += n
-        with open(topath,'w+') as fs:
-            fs.write(newContents)
-        f.close()
-        fs.close()
+    with open(topath,'w+') as fs:
+        fs.write(newContents)
+    f.close()
+    fs.close()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'JCE - JSP/JPSX CodeEncode')
